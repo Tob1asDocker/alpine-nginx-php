@@ -1,5 +1,5 @@
 # Pull base image
-FROM alpine:3.11
+FROM alpine:3.12
 
 # Label for Information about this Image.
 LABEL org.opencontainers.image.authors="Tobias Hargesheimer <docker@ison.ws>" \
@@ -11,18 +11,20 @@ LABEL org.opencontainers.image.authors="Tobias Hargesheimer <docker@ison.ws>" \
 
 # Define variable
 ENV LANG C.UTF-8
-ENV TZ Europe/Berlin
 ENV TERM=xterm
-ENV WWW_USER=www
+ENV WWW_USER=www-data
 
 # Install
-RUN addgroup -S $WWW_USER && adduser -D -S -h /var/cache/$WWW_USER -s /sbin/nologin -G $WWW_USER $WWW_USER && \
+RUN set -eux &&  \
+	addgroup -g 82 -S $WWW_USER && adduser -u 82 -D -S -h /var/cache/$WWW_USER -s /sbin/nologin -G $WWW_USER $WWW_USER && \
+	# 82 is the standard uid/gid for "www-data" in Alpine
+	# https://git.alpinelinux.org/aports/tree/main/nginx/nginx.pre-install
 	apk --no-cache add \
-	tzdata \
-	#git wget curl nano zip unzip \
-	supervisor \
-	nginx \
-	php7 php7-common php7-fpm php7-opcache \
+		tzdata \
+		#git wget curl nano zip unzip \
+		supervisor \
+		nginx \
+		php7 php7-common php7-fpm php7-opcache \
 	&& mkdir -p /run/nginx \
 	&& mkdir -p /etc/ssl/nginx \
 	&& mkdir -p /var/www/html \ 
@@ -44,7 +46,7 @@ RUN addgroup -S $WWW_USER && adduser -D -S -h /var/cache/$WWW_USER -s /sbin/nolo
 # Copy files and folders into image
 COPY config/nginx_default.conf /etc/nginx/conf.d/default.conf
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY source /var/www/html
+#COPY source /var/www/html
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
