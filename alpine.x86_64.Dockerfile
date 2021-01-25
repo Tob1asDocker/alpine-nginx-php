@@ -20,14 +20,14 @@ RUN set -eux &&  \
 	# 82 is the standard uid/gid for "www-data" in Alpine
 	# https://git.alpinelinux.org/aports/tree/main/nginx/nginx.pre-install
 	apk --no-cache add \
-		tzdata \
-		#git wget curl nano zip unzip \
-		supervisor \
-		nginx \
-		php7 php7-common php7-fpm php7-opcache \
+	tzdata \
+	#git wget curl nano zip unzip \
+	supervisor \
+	nginx \
+	php7 php7-common php7-fpm php7-opcache \
 	&& mkdir -p /run/nginx \
 	&& mkdir -p /etc/ssl/nginx \
-	&& mkdir -p /var/www/html \ 
+	&& mkdir -p /var/www/html \
 	&& chown -R $WWW_USER:$WWW_USER /var/www/html \
 	#&& chown -R $WWW_USER:$WWW_USER /var/tmp/nginx \
 	&& sed -i "s/ssl_session_cache shared:SSL:2m;/#ssl_session_cache shared:SSL:2m;/g" /etc/nginx/nginx.conf \
@@ -38,6 +38,7 @@ RUN set -eux &&  \
 	&& sed -i "s|;listen.group\s*=\s*nobody|listen.group = ${WWW_USER}|g" /etc/php7/php-fpm.d/www.conf \
 	&& sed -i "s|user\s*=\s*nobody|user = ${WWW_USER}|g" /etc/php7/php-fpm.d/www.conf \
 	&& sed -i "s|group\s*=\s*nobody|group = ${WWW_USER}|g" /etc/php7/php-fpm.d/www.conf \
+	&& ln -sf /dev/stdout /var/log/nginx.log \
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log \
 	&& ln -sf /dev/stderr /var/log/php7/error.log \
