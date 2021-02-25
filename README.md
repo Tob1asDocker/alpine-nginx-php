@@ -1,5 +1,13 @@
 # AlpineLinux with NGINX and PHP7 on x86_64 and arm
 
+### NOT MAINTAINED AND DEPRECATED
+
+This image is not maintained and is deprecated!  
+  
+Please use the my image with *alpine* and *nginx* **based on offical php image**: [DockerHub](https://hub.docker.com/r/tobi312/php/) / [GitHub](https://github.com/Tob1asDocker/php)
+
+---
+
 ### Supported tags and respective `Dockerfile` links
 -	[`latest` (*Dockerfile*)](https://github.com/Tob1asDocker/alpine-nginx-php/blob/master/alpine.x86_64.Dockerfile) (x86_64)
 -	[`extended` (*Dockerfile*)](https://github.com/Tob1asDocker/alpine-nginx-php/blob/master/alpine.x86_64.extended.Dockerfile) (x86_64)
